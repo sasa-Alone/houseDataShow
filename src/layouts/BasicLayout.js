@@ -46,6 +46,10 @@ class BasicLayout extends Component {
       router.push('/user');
       return;
     }
+    if(e.key === "5"){
+      router.push('/comment');
+      return;
+    }
     router.push('/');
     return;
   }
@@ -74,6 +78,10 @@ class BasicLayout extends Component {
               <Menu.Item key="3" >
                 <Icon type="upload" />
                 <span>爬虫监控</span>
+              </Menu.Item>
+              <Menu.Item key="5" >
+                <Icon type="upload" />
+                <span>评价讨论</span>
               </Menu.Item>
               <Menu.Item key="4" >
                 <Icon type="upload" />

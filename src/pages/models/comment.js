@@ -1,24 +1,23 @@
-import { queryAllHouse } from '../../service/houses';
+import { queryAllComment } from '../../service/houses';
 
 export default {
-  namespace: 'searchHouse',
+  namespace: 'comment',
 
   state: {
-    houseList:[],
-    selectedRowKeys: [],
     previewVisible: false,
     previewImage: '',
     fileList: [],
+    commentList:[],
   },
 
   effects: {
-    *getHouseList(_, { call, put }) {
-      const { houses } = yield call(queryAllHouse);
+    *getCommentList(_, { call, put }) {
+      const { comments } = yield call(queryAllComment);
+      console.log("comments,comments",comments)
       yield put({
         type: 'save',
         payload: {
-          houseList: houses,
-          selectedRowKeys: [],
+          commentList: comments,
         },
       });
     },

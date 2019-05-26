@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export default function request(url, options = {}) {
-  console.log("url",url)
   return new Promise((resolve, reject) => {
     return axios({
       url,
