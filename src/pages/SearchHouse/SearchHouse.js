@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input,Row, Col, Form, Button, Radio, Select, Table  } from 'antd';
 import styles from "./SearchHouse.less";
+import { connect } from 'dva';
 
 const Search = Input.Search;
 const { Option } = Select;
@@ -12,11 +13,11 @@ const columns = [
     filters: [
       {
         text: '自如',
-        value: 'Joe',
+        value: 'ziru',
       },
       {
         text: '蛋壳公寓',
-        value: 'Jim',
+        value: 'danke',
       },
     ],
     // specify the condition of filtering result
@@ -26,8 +27,8 @@ const columns = [
     sortDirections: ['descend'],
   },
   {
-    title: '标题',
-    dataIndex: 'title',
+    title: '类型',
+    dataIndex: 'type',
   },
   {
     title: '租金',
@@ -67,52 +68,32 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    platform: '自如',
-    title: "高润云杉郡",
-    price: '1500/月',
-    model:'一室一厅',
-    size:'35m',
-    renovations:'朝北',
-    area:"滨江区",
-    floor:"3",
-    special:"独卫",
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
-
 function onChange(pagination, filters, sorter) {
   console.log('params', pagination, filters, sorter);
 }
 
+@connect(({ searchHouse })=> {
+
+  console.log("searchHouse",searchHouse)
+  return ({
+    dataSource: searchHouse.houseList,
+  })
+
+})
 class SearchHouse extends Component {
 
-  constructor(props){
-    super(props);
+  // constructor(props){
+  //   super(props);
 
 
+  // }
+
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch({
+      type:"searchHouse/getHouseList",
+    });
   }
-
-
 
   renderForm(){
     const formItemLayout = {
@@ -253,7 +234,9 @@ class SearchHouse extends Component {
   }
 
   renderTable(){
-    return (<Table columns={columns} dataSource={data} onChange={onChange} />);
+    const { dataSource } = this.props;
+    console.log("datasorce",dataSource)
+    return (<Table columns={columns} dataSource={dataSource} onChange={onChange} />);
   }
 
   render() {

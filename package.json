@@ -8,10 +8,14 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "dva": "^2.5.0-beta.2",
     "antd": "^3.15.0",
+    "axios": "^0.18.0",
+    "dva": "^2.5.0-beta.2",
+    "mockjs": "^1.0.1-beta3",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "redbox-react": "^1.6.0",
+    "roadhog-api-doc": "^1.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
