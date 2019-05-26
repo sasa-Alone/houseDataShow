@@ -21,6 +21,11 @@ export default [
       },
       //个人中心
       {
+        path: '/comment',
+        component:'./Comment/Comment'
+      },
+      //个人中心
+      {
         path: '/user',
         component:'./User/User'
       },

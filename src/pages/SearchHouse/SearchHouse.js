@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Input,Row, Col, Form, Button, Radio, Select, Table  } from 'antd';
+import { Input,Row, Col, Form, Button, Radio, Select, Table, Divider } from 'antd';
 import styles from "./SearchHouse.less";
 import { connect } from 'dva';
 
-const Search = Input.Search;
 const { Option } = Select;
+const { Search } = Input;
 
 const columns = [
   {
@@ -13,18 +13,16 @@ const columns = [
     filters: [
       {
         text: '自如',
-        value: 'ziru',
+        value: '自如',
       },
       {
         text: '蛋壳公寓',
-        value: 'danke',
+        value: '蛋壳公寓',
       },
     ],
     // specify the condition of filtering result
     // here is that finding the name started with `value`
-    onFilter: (value, record) => record.name.indexOf(value) === 0,
-    sorter: (a, b) => a.name.length - b.name.length,
-    sortDirections: ['descend'],
+    onFilter: (value, record) => record.platform.indexOf(value) === 0,
   },
   {
     title: '类型',
@@ -33,7 +31,7 @@ const columns = [
   {
     title: '租金',
     dataIndex: 'price',
-    sorter: (a, b) => a.address.length - b.address.length,
+    sorter: (a, b) => a.price - b.price,
     sortDirections: ['descend', 'ascend'],
   },
   {
@@ -44,20 +42,20 @@ const columns = [
     title: '面积',
     dataIndex: 'size',
     defaultSortOrder: 'descend',
-    sorter: (a, b) => a.age - b.age,
+    sorter: (a, b) => a.size - b.size,
   },
-  {
-    title: '朝向',
-    dataIndex: 'renovations',
-  },
+  // {
+  //   title: '朝向',
+  //   dataIndex: 'renovations',
+  // },
   {
     title: '区域',
     dataIndex: 'area',
   },
-  {
-    title: '楼层',
-    dataIndex: 'floor',
-  },
+  // {
+  //   title: '楼层',
+  //   dataIndex: 'floor',
+  // },
   {
     title: '特色',
     dataIndex: 'special',
@@ -65,28 +63,31 @@ const columns = [
   {
     title: '操作',
     dataIndex: 'link',
+    render: (text, record) => (
+      <span>
+        <a href= {record.link}>详情</a>
+        <Divider type="vertical" />
+        <a href="javascript:;">收藏</a>
+      </span>
+    ),
   },
 ];
 
-function onChange(pagination, filters, sorter) {
-  console.log('params', pagination, filters, sorter);
-}
-
-@connect(({ searchHouse })=> {
-
-  console.log("searchHouse",searchHouse)
+@connect(({ searchHouse, loading })=> {
   return ({
+    selectedRowKeys: searchHouse.selectedRowKeys,
     dataSource: searchHouse.houseList,
+    loading: loading.effects['searchHouse/getHouseList'],
   })
-
 })
 class SearchHouse extends Component {
 
-  // constructor(props){
-  //   super(props);
+  constructor(props){
+    super(props);
 
-
-  // }
+    this.handleFetch = this.handleFetch.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
+  }
 
   componentDidMount(){
     const { dispatch } = this.props;
@@ -94,6 +95,23 @@ class SearchHouse extends Component {
       type:"searchHouse/getHouseList",
     });
   }
+
+  handleFetch = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type:"searchHouse/getHouseList",
+    });
+  };
+
+  handleSelectChange = selectedRowKeys => {
+    const { dispatch } = this.props;
+    dispatch({
+      type:"searchHouse/save",
+      payload: {
+        selectedRowKeys,
+      }
+    });
+  };
 
   renderForm(){
     const formItemLayout = {
@@ -109,7 +127,7 @@ class SearchHouse extends Component {
           <Row>
             <Col md={12}>
               <Form.Item label="平台" {...formItemShortLayouts}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="ziru">自如</Radio.Button>
                     <Radio.Button value="danke">蛋壳</Radio.Button>
@@ -118,7 +136,7 @@ class SearchHouse extends Component {
             </Col>
             <Col md={12} >
               <Form.Item label="类型" {...formItemShortLayouts}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="full">整租</Radio.Button>
                     <Radio.Button value="shared">合租</Radio.Button>
@@ -129,7 +147,7 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="区域" {...formItemLayout}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="shangcheng">上城</Radio.Button>
                     <Radio.Button value="xiacheng">下城</Radio.Button>
@@ -147,7 +165,7 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="租金" {...formItemLayout}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="1500">1500以下</Radio.Button>
                     <Radio.Button value="1500-2000">1500-2000</Radio.Button>
@@ -161,7 +179,7 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="居室" {...formItemLayout}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="1">1居室</Radio.Button>
                     <Radio.Button value="2">2居室</Radio.Button>
@@ -175,7 +193,7 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="面积" {...formItemLayout}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="40">
                       40m<sup>2</sup>以下
@@ -197,9 +215,9 @@ class SearchHouse extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={13}>
+            <Col md={13} style={{marginLeft:-4}}>
               <Form.Item label="特色" {...formItemShortLayouts}>
-                  <Radio.Group buttonStyle="solid">
+                  <Radio.Group buttonStyle="solid" defaultValue={"no"}>
                     <Radio.Button value="no">不限</Radio.Button>
                     <Radio.Button value="cesuo">独立卫生间</Radio.Button>
                     <Radio.Button value="yangtai">独立阳台</Radio.Button>
@@ -209,7 +227,7 @@ class SearchHouse extends Component {
             </Col>
             <Col md={11}>
               <Form.Item label="朝向" {...formItemShortLayouts}>
-                <Select style={{ width: 120 }}>
+                <Select style={{ width: 120 }} defaultValue={"no"}>
                   <Option value="no">不限</Option>
                   <Option value="south">朝南</Option>
                   <Option value="north">朝北</Option>
@@ -220,7 +238,7 @@ class SearchHouse extends Component {
             </Col>
           </Row>
           <div style={{ overflow: 'hidden' }}>
-            <div style={{ marginBottom: 24 }}>
+            <div style={{ marginBottom: 24 , marginTop: 24}}>
               <Button type="primary" htmlType="submit">
                 查询
               </Button>
@@ -234,13 +252,34 @@ class SearchHouse extends Component {
   }
 
   renderTable(){
-    const { dataSource } = this.props;
-    console.log("datasorce",dataSource)
-    return (<Table columns={columns} dataSource={dataSource} onChange={onChange} />);
+    const { dataSource, loading, selectedRowKeys } = this.props;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.handleSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+    return(
+      <div>
+        <div style={{ marginBottom: 16 }}>
+          <Button type="primary" onClick={this.handleFetch} disabled={!hasSelected} loading={loading}>
+            重新加载
+          </Button>
+          <Button type="primary" style={{marginLeft: 16}}>
+            批量导出
+          </Button>
+          <Button type="primary" style={{marginLeft: 16}}>
+            数据分析
+          </Button>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `已选 ${selectedRowKeys.length} 条数据` : ''}
+          </span>
+        </div>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={dataSource} />
+      </div>
+    )
   }
 
   render() {
-
     return(
       <div className={styles.root}>
         <Row>
@@ -249,7 +288,6 @@ class SearchHouse extends Component {
             <Search
               placeholder="请输入关键词搜索：如地址/小区等"
               enterButton
-              // size="large"
               onSearch={value => console.log(value)}
             />
           </Col>

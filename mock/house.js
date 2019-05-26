@@ -4,12 +4,13 @@ import { wrapSuccessResponse } from './utils';
 
 const getHouseList = (params) => {
   return mock({
-    totalElements: 10,
+    totalElements: 20,
     totalPages: 2,
     page: +params.page,
-    content: [],
+    houses: [],
     "houses|20":[
       {
+        "key":"@id()",
         "platform|1": ['自如','蛋壳公寓','链家','嗨住租房','我爱我家'],
         "type|1":["整租","合租"],
         "price":'@integer(1000,3000)',
@@ -25,8 +26,25 @@ const getHouseList = (params) => {
   });
 };
 
+const getCommentList = (params) => {
+  return mock({
+    totalElements: 20,
+    totalPages: 2,
+    page: +params.page,
+    comments: [],
+    "comments|20":[
+      {
+        "id":"@id()",
+        "user|1": ['未知用户','Alone','作业要写不完了','送你fafa'],
+        "comment":'@paragraph(1,5)',
+      }
+    ]
+  });
+};
+
 const proxy = {
   'GET /houseList': wrapSuccessResponse(getHouseList),
+  'GET /commentList':  wrapSuccessResponse(getCommentList),
 };
 
 export default delay(proxy, 500);
