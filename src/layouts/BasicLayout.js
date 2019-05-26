@@ -31,26 +31,26 @@ class BasicLayout extends Component {
 
   handleClick = (e) => {
     if(e.key === "1"){
-      router.push('/searchHouse');
+      router.push('/index/searchHouse');
       return;
     }
     if(e.key === "2"){
-      router.push('/dataAnalysis');
+      router.push('/index/dataAnalysis');
       return;
     }
     if(e.key === "3"){
-      router.push('/monitor');
+      router.push('/index/monitor');
       return;
     }
     if(e.key === "4"){
-      router.push('/user');
+      router.push('/index/user');
       return;
     }
     if(e.key === "5"){
-      router.push('/comment');
+      router.push('/index/comment');
       return;
     }
-    router.push('/');
+    router.push('/index');
     return;
   }
 

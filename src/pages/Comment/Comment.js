@@ -122,13 +122,15 @@ class SearchHouse extends Component {
   renderCommentList(){
     const { commentList } = this.props;
     console.log("commentList,commentList",commentList)
-
+    const pagination  = {
+      pageSize:5,
+    }
     return(
       <List
         header="评价列表："
         className="list"
         itemLayout="horizontal"
-        pagination
+        pagination= {pagination}
         dataSource={commentList}
         renderItem={item => (
           <List.Item>
@@ -146,8 +148,8 @@ class SearchHouse extends Component {
   render() {
     return(
       <div className={styles.root}>
-        {this.renderComment()}
         {this.renderCommentList()}
+        {this.renderComment()}
       </div>
     );
   }
