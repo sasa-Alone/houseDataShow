@@ -1,32 +1,36 @@
 export default [
   {
     path: `/`,
+    component: '../layouts/HomeLayout',
+  },
+  {
+    path: `/index`,
     component: '../layouts/BasicLayout',
     routes: [
       // 房源搜索
-      { path: '/', redirect: '/searchHouse'},
+      { path: '/index', redirect: '/index/searchHouse'},
       {
-        path: '/searchHouse',
+        path: '/index/searchHouse',
         component:'./SearchHouse/SearchHouse'
       },
       //数据分析
       {
-        path: '/dataAnalysis',
+        path: '/index/dataAnalysis',
         component:'./DataAnalysis/DataAnalysis'
       },
       //爬虫监控
       {
-        path: '/monitor',
+        path: '/index/monitor',
         component:'./Monitor/Monitor'
       },
       //个人中心
       {
-        path: '/comment',
+        path: '/index/comment',
         component:'./Comment/Comment'
       },
       //个人中心
       {
-        path: '/user',
+        path: '/index/user',
         component:'./User/User'
       },
     ]

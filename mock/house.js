@@ -31,14 +31,55 @@ const getCommentList = (params) => {
     totalElements: 20,
     totalPages: 2,
     page: +params.page,
-    comments: [],
-    "comments|20":[
+    comments: [
       {
-        "id":"@id()",
-        "user|1": ['未知用户','Alone','作业要写不完了','送你fafa'],
-        "comment":'@paragraph(1,5)',
+        "id":"1",
+        "user": '未知用户',
+        "comment":'自如平台的房源非常好，装修简洁，居住舒适',
+      },
+      {
+        "id":"2",
+        "user": 'Alone',
+        "comment":'我的天啊，这蛋壳的中介态度太差了吧！差评差评！挂这个中介！生气！',
+      },
+      {
+        "id":"3",
+        "user": '作业要写不完了',
+        "comment":'去自如跟蛋壳都租过房子，感觉自如的房子偏贵',
+      },
+      {
+        "id":"4",
+        "user": '送你fafa',
+        "comment":'租房子真难啊，找都找不下来',
+      },
+      {
+        "id":"5",
+        "user": '未知用户',
+        "comment":'没有租房经验，来这里看看能不能找到好点的房源',
+      },
+      {
+        "id":"6",
+        "user": '未知用户',
+        "comment":'刚毕业，租房好难找',
+      },
+      {
+        "id":"7",
+        "user": 'sasa',
+        "comment":'蛋壳的中介费有点贵',
+      },
+      {
+        "id":"8",
+        "user": '一般般吧',
+        "comment":'过来看看哪家的房子看起来靠谱点，这可是未来生活质量的保障啊',
       }
-    ]
+    ],
+    // "comments|20":[
+    //   {
+    //     "id":"@id()",
+    //     "user|1": ['未知用户','Alone','作业要写不完了','送你fafa'],
+    //     "comment":'@ctitle(10,50)',
+    //   }
+    // ]
   });
 };
 
