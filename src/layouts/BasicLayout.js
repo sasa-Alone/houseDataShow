@@ -61,30 +61,30 @@ class BasicLayout extends Component {
         <Layout>
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="logo">
-              <img src={logo} alt="logo" />
-              <span className="title">
+              <Icon type="home" style={{ fontSize: '25px', color: '#08c' }}/>
+              <a className="title" href="/">
                 Fast Rent
-              </span>
+              </a>
             </div>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} onClick={this.handleClick}>
               <Menu.Item key="1" >
-                <Icon type="user" />
+                <Icon type="search" />
                 <span>房源搜索</span>
               </Menu.Item>
               <Menu.Item key="2" >
-                <Icon type="video-camera" />
+                <Icon type="area-chart" />
                 <span>数据分析</span>
               </Menu.Item>
               <Menu.Item key="3" >
-                <Icon type="upload" />
+                <Icon type="dashboard" />
                 <span>爬虫监控</span>
               </Menu.Item>
               <Menu.Item key="5" >
-                <Icon type="upload" />
+                <Icon type="form" />
                 <span>评价讨论</span>
               </Menu.Item>
               <Menu.Item key="4" >
-                <Icon type="upload" />
+                <Icon type="user" />
                 <span>个人中心</span>
               </Menu.Item>
             </Menu>

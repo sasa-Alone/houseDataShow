@@ -154,7 +154,8 @@ class BasicLayout extends Component {
         <Layout className="layout">
           <Header className="header">
             <div className="logo">
-              <img src={logo} alt="logo" />
+              {/* <img src={logo} alt="logo" /> */}
+              <Icon type="home" style={{ fontSize: '25px', color: '#08c' }}/>
               <span className="title">
                 Fast Rent
               </span>
