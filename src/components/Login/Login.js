@@ -4,10 +4,13 @@ import styles from './Login.less';
 
 class NormalLoginForm extends Component {
   handleSubmit = e => {
+    const { onLogin } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        if(onLogin){
+          onLogin(values.username,values.password);
+        }
       }
     });
   };
@@ -19,6 +22,7 @@ class NormalLoginForm extends Component {
       onClick();
     }
   }
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -55,7 +59,7 @@ class NormalLoginForm extends Component {
               忘记密码
             </a>
             <Button type="primary" htmlType="submit" className="login-form-button">
-              Log in
+              登录
             </Button>
             <a href="" onClick={this.handleClick}>马上注册</a>
           </Form.Item>

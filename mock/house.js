@@ -86,6 +86,12 @@ const getCommentList = (params) => {
 const proxy = {
   'GET /houseList': wrapSuccessResponse(getHouseList),
   'GET /commentList':  wrapSuccessResponse(getCommentList),
+  'POST /house/login':  wrapSuccessResponse(),
+  'POST /house/register':  wrapSuccessResponse(),
+  'POST /house/search':  wrapSuccessResponse(getHouseList),
+  'GET  /house/collection':  wrapSuccessResponse(getHouseList),
+  'POST /house/export': wrapSuccessResponse(),
+  'POST /house/analysis': wrapSuccessResponse(),
 };
 
 export default delay(proxy, 500);

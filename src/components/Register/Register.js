@@ -3,13 +3,9 @@ import styles from './Register.less';
 import {
   Form,
   Input,
-  Select,
-  AutoComplete,
   Button
 } from 'antd';
 
-// const { Option } = Select;
-// const AutoCompleteOption = AutoComplete.Option;
 
 class RegistrationForm extends Component {
   state = {
@@ -18,10 +14,20 @@ class RegistrationForm extends Component {
   };
 
   handleSubmit = e => {
+    const { onRegister } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        if(onRegister){
+          onRegister(values.username,values.password);
+        }
+      }else{
+        this.props.form.setFields({
+          username:"",
+          password:"",
+          confirm:"",
+        })
       }
     });
   };
@@ -48,19 +54,8 @@ class RegistrationForm extends Component {
     callback();
   };
 
-  handleWebsiteChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-    }
-    this.setState({ autoCompleteResult });
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -84,18 +79,6 @@ class RegistrationForm extends Component {
         },
       },
     };
-    // const prefixSelector = getFieldDecorator('prefix', {
-    //   initialValue: '86',
-    // })(
-    //   <Select style={{ width: 70 }}>
-    //     <Option value="86">+86</Option>
-    //     <Option value="87">+87</Option>
-    //   </Select>,
-    // );
-
-    // const websiteOptions = autoCompleteResult.map(website => (
-    //   <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    // ));
 
     return (
       <div className={styles.root}>
@@ -103,10 +86,6 @@ class RegistrationForm extends Component {
           <Form.Item label="用户名：">
             {getFieldDecorator('username', {
               rules: [
-                {
-                  type: 'text',
-                  message: 'The input is not valid E-mail!',
-                },
                 {
                   required: true,
                   message: '请输入用户名!',
@@ -132,7 +111,7 @@ class RegistrationForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: '请确认密码!',
                 },
                 {
                   validator: this.compareToFirstPassword,

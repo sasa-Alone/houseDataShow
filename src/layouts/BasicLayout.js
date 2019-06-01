@@ -1,7 +1,6 @@
 import React,{ Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import style from './BasicLayout.less';
-import logo from '../assets/logo.png';
 import { connect } from 'dva';
 import router from 'umi/router';
 

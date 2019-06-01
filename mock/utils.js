@@ -1,7 +1,9 @@
 import mockjs from 'mockjs';
 
 export const wrapSuccessResponse = (data = null) => (req, res) => {
+  console.log("i am here")
   const params = req.method === 'GET' ? req.query : req.body;
+
   const resolveData = typeof data === 'function' ? data(params) : data;
   Promise.resolve(resolveData).then(ret => {
     res.send({

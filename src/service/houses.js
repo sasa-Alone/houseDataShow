@@ -1,4 +1,4 @@
-// import { stringify } from 'qs';
+import { stringify } from 'qs';
 import request from './request';
 
 
@@ -10,6 +10,47 @@ export function queryAllHouse() {
 
 export function queryAllComment() {
   return request(`/commentList`);
+}
+
+export function login(params){
+  console.log(params)
+  return request(`/house/login`,{
+    method: 'post',
+    params,
+  });
+}
+
+export function register(params){
+  return request(`/house/register`,{
+    method: 'post',
+    params,
+  });
+}
+
+export function queryHouse(params){
+  return request(`/house/search`,{
+    method: 'post',
+    params,
+  });
+}
+
+export function exportHouse(params){
+  console.log("liebiao",params)
+  return request(`/house/export`,{
+    method: 'post',
+    params,
+  });
+}
+
+export function analysisHouse(params){
+  return request(`/house/analysis`,{
+    method: 'post',
+    params,
+  });
+}
+
+export function queryAllCollection(){
+  return request(`/house/collection`);
 }
 
 // export function queryActivityDetail(params){

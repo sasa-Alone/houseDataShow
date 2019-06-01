@@ -62,11 +62,11 @@ const columns = [
   },
 ];
 
-@connect(({ searchHouse, loading })=> {
+@connect(({ user, loading })=> {
   return ({
-    selectedRowKeys: searchHouse.selectedRowKeys,
-    dataSource: searchHouse.houseList,
-    loading: loading.effects['searchHouse/getHouseList'],
+    selectedRowKeys: user.selectedRowKeys,
+    dataSource: user.collections,
+    loading: loading.effects['user/getCollectionList'],
   })
 })
 class SearchHouse extends Component {
@@ -81,7 +81,7 @@ class SearchHouse extends Component {
   componentDidMount(){
     const { dispatch } = this.props;
     dispatch({
-      type:"searchHouse/getHouseList",
+      type:"user/getCollectionList",
     });
   }
 

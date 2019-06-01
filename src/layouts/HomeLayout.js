@@ -7,7 +7,6 @@ import house1 from '../assets/house1.jpg';
 import house2 from '../assets/house2.jpg';
 import house3 from '../assets/house3.jpg';
 import description from '../assets/description.png';
-import logo from '../assets/logo.png';
 import { connect } from 'dva';
 import router from 'umi/router';
 import WrappedNormalLoginForm from '../components/Login/Login';
@@ -16,9 +15,10 @@ import { Layout, Menu, Carousel, Divider, Row, Col, Card, Icon, Modal } from 'an
 
 const { Header, Content, Footer } = Layout;
 
-
-@connect(({ global }) => ({
+@connect(({ global,loading }) => ({
     collapsed: global.collapsed,
+    loginVisible: global.loginVisible,
+    registerVisible: global.registerVisible,
 }))
 class BasicLayout extends Component {
 
@@ -26,34 +26,45 @@ class BasicLayout extends Component {
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
-    }
-
-    state = {
-      loginVisible: false,
-      registerVisible: false,
-     };
+    };
 
     showLoginModal = () => {
-      this.setState({
-        loginVisible: true,
+      const { dispatch } = this.props;
+      dispatch({
+        type:"global/save",
+        payload:{
+          loginVisible: true
+        },
       });
     };
 
     hideLoginModal = () => {
-      this.setState({
-        loginVisible: false,
+      const { dispatch } = this.props;
+      dispatch({
+        type:"global/save",
+        payload:{
+          loginVisible: false,
+        },
       });
     };
 
     showRegisterModal = () => {
-      this.setState({
-        registerVisible: true,
+      const { dispatch } = this.props;
+      dispatch({
+        type:"global/save",
+        payload:{
+          registerVisible: true,
+        },
       });
     };
 
     hideRegisterModal = () => {
-      this.setState({
-        registerVisible: false,
+      const { dispatch } = this.props;
+      dispatch({
+        type:"global/save",
+        payload:{
+          registerVisible: false,
+        },
       });
     };
 
@@ -85,6 +96,30 @@ class BasicLayout extends Component {
       });
     };
 
+    handleLogin = (username,password) =>{
+      const { dispatch } = this.props;
+      console.log("login")
+      dispatch({
+        type:'global/login',
+        payload:{
+          username,
+          password
+        }
+      })
+    }
+
+    handleRegister = (username,password) =>{
+      const { dispatch } = this.props;
+      console.log("register")
+      dispatch({
+        type:'global/register',
+        payload:{
+          username,
+          password
+        }
+      })
+    }
+
   renderPicList(){
     return(
       <div style={{ background: '#ECECEC', padding: '30px', margin: '20px' }}>
@@ -113,36 +148,38 @@ class BasicLayout extends Component {
   }
 
   renderlogin(){
+    const { loginVisible } = this.props;
     return(
       <div>
         <Modal
           title={<div style={{margin:"auto",textAlign:"center"}}>登录</div>}
-          visible={this.state.loginVisible}
+          visible={loginVisible}
           footer={null}
           onOk={this.hideLoginModal}
           onCancel={this.hideLoginModal}
           okText="确认"
           cancelText="取消"
         >
-          <WrappedNormalLoginForm onClick={this.handleGoToRegister}/>
+          <WrappedNormalLoginForm onClick={this.handleGoToRegister} onLogin={this.handleLogin}/>
         </Modal>
       </div>
     )
   }
 
   renderRegister(){
+    const { registerVisible } = this.props;
     return(
       <div>
         <Modal
           title={<div style={{margin:"auto",textAlign:"center"}}>注册</div>}
-          visible={this.state.registerVisible}
+          visible={registerVisible}
           footer={null}
           onOk={this.hideRegisterModal}
           onCancel={this.hideRegisterModal}
           okText="确认"
           cancelText="取消"
         >
-          <WrappedRegistrationForm />
+          <WrappedRegistrationForm onRegister={this.handleRegister}/>
         </Modal>
       </div>
     )
@@ -173,7 +210,7 @@ class BasicLayout extends Component {
 
             </Menu>
             <div  className="login">
-              <a href= "#" onClick={this.showLoginModal}>登录</a>
+              <a href= "#" onClick={this.showLoginModal} >登录</a>
               <Divider type="vertical" />
               <a href="#" onClick={this.showRegisterModal}>注册</a>
             </div>
