@@ -1,4 +1,6 @@
-import { queryAllCollection } from '../../service/houses';
+import { queryAllCollection,unCollection } from '../../service/houses';
+import store2 from 'store2';
+import { message } from 'antd';
 
 export default {
   namespace: 'user',
@@ -11,7 +13,8 @@ export default {
 
   effects: {
     *getCollectionList(_, { call, put }) {
-      const { houses } = yield call(queryAllCollection);
+      const username = store2.session('username')
+      const { houses } = yield call(queryAllCollection,{username});
       console.log("collections,collections",houses)
       yield put({
         type: 'save',
@@ -19,6 +22,16 @@ export default {
           collections:houses,
         },
       });
+    },
+    * unCollection({payload},{call, put}){
+      const { house } = payload;
+      const houseId = house._id
+      const username = store2.session('username');
+      yield call(unCollection,{houseId,username});
+      yield message.success('取消成功',0.5);
+      yield put({
+        type: 'getCollectionList',
+      })
     },
   },
 

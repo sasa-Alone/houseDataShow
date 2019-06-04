@@ -1,66 +1,7 @@
 import React, { Component } from 'react';
-import { Input, Button, Radio, Select, Table, Divider } from 'antd';
+import { Input, Button, Radio, Select, Table, Divider, Tag } from 'antd';
 import styles from "./User.less";
 import { connect } from 'dva';
-
-const columns = [
-  {
-    title: '平台名称',
-    dataIndex: 'platform',
-    filters: [
-      {
-        text: '自如',
-        value: '自如',
-      },
-      {
-        text: '蛋壳公寓',
-        value: '蛋壳公寓',
-      },
-    ],
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    onFilter: (value, record) => record.platform.indexOf(value) === 0,
-  },
-  {
-    title: '类型',
-    dataIndex: 'type',
-  },
-  {
-    title: '租金',
-    dataIndex: 'price',
-    sorter: (a, b) => a.price - b.price,
-    sortDirections: ['descend', 'ascend'],
-  },
-  {
-    title: '户型',
-    dataIndex: 'model',
-  },
-  {
-    title: '面积',
-    dataIndex: 'size',
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.size - b.size,
-  },
-  {
-    title: '区域',
-    dataIndex: 'area',
-  },
-  {
-    title: '特色',
-    dataIndex: 'special',
-  },
-  {
-    title: '操作',
-    dataIndex: 'link',
-    render: (text, record) => (
-      <span>
-        <a href= {record.link}>详情</a>
-        <Divider type="vertical" />
-        <a href="javascript:;">取消收藏</a>
-      </span>
-    ),
-  },
-];
 
 @connect(({ user, loading })=> {
   return ({
@@ -70,6 +11,83 @@ const columns = [
   })
 })
 class SearchHouse extends Component {
+
+  columns = [
+    {
+      title: '平台名称',
+      dataIndex: 'platform',
+      filters: [
+        {
+          text: '自如',
+          value: '自如',
+        },
+        {
+          text: '蛋壳公寓',
+          value: '蛋壳公寓',
+        },
+      ],
+      // specify the condition of filtering result
+      // here is that finding the name started with `value`
+      onFilter: (value, record) => record.platform.indexOf(value) === 0,
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+    },
+    {
+      title: '租金',
+      dataIndex: 'price',
+      sorter: (a, b) => a.price - b.price,
+      sortDirections: ['descend', 'ascend'],
+    },
+    {
+      title: '户型',
+      dataIndex: 'model',
+    },
+    {
+      title: '面积',
+      dataIndex: 'size',
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => a.size - b.size,
+    },
+    {
+      title: '区域',
+      dataIndex: 'area',
+    },
+    {
+      title: '特色',
+      dataIndex: 'special',
+      className:'tags',
+        render:(text,record)=>{
+          let arr = []
+          for (let i in text) {
+              arr.push(text[i]); //属性
+          }
+          return arr.map(item=>(<Tag color="blue">{item}</Tag>) )
+        }
+    },
+    {
+      title: '操作',
+      dataIndex: 'link',
+      render: (text, record) => (
+        <span>
+          <a href= {record.link}>详情</a>
+          <Divider type="vertical" />
+          <a href="#"
+          onClick={(e)=>{
+            const {dispatch} = this.props;
+            console.log("unCollection",record)
+            dispatch({
+              type:"user/unCollection",
+              payload:{
+                house:record,
+              }
+            })
+          }}>取消收藏</a>
+        </span>
+      ),
+    },
+  ];
 
   constructor(props){
     super(props);
@@ -88,14 +106,14 @@ class SearchHouse extends Component {
   handleFetch = () => {
     const { dispatch } = this.props;
     dispatch({
-      type:"searchHouse/getHouseList",
+      type:"user/getCollectionList",
     });
   };
 
   handleSelectChange = selectedRowKeys => {
     const { dispatch } = this.props;
     dispatch({
-      type:"searchHouse/save",
+      type:"user/save",
       payload: {
         selectedRowKeys,
       }
@@ -125,7 +143,7 @@ class SearchHouse extends Component {
             {hasSelected ? `已选 ${selectedRowKeys.length} 条数据` : ''}
           </span>
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={dataSource} />
+        <Table rowSelection={rowSelection} columns={this.columns} dataSource={dataSource} rowKey="_id"/>
       </div>
     )
   }

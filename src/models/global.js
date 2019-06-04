@@ -1,4 +1,4 @@
-import { login } from '../service/houses';
+import { login,register } from '../service/houses';
 import store2 from 'store2';
 import { message } from 'antd';
 import router from 'umi/router';
@@ -28,7 +28,7 @@ export default {
     },
     * register({payload}, { call, put }) {
       const { username,password } = payload;
-      yield call(login,{username,password});
+      yield call(register,{username,password});
       // store2.session('username',username);
       yield put({
         type:'save',

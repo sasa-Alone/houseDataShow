@@ -2,8 +2,11 @@ import {
   queryAllHouse,
   queryHouse,
   exportHouse,
-  analysisHouse
+  analysisHouse,
+  addCollection,
 } from '../../service/houses';
+import store2 from 'store2';
+import { message } from 'antd';
 
 export default {
   namespace: 'searchHouse',
@@ -51,13 +54,25 @@ export default {
       });
     },
     * fetchHouses({payload},{ call, put }){
-      const { houses } = yield call(queryHouse);
+      const selectConditons = payload.selectConditons;
+      console.log(selectConditons)
+      const { houses } = yield call(queryHouse,selectConditons);
       yield put({
         type:'save',
         payload:{
           houseList:houses,
         }
       })
+    },
+    * addCollection({payload},{call, put}){
+      const { house } = payload;
+      const houseId = house._id
+      const username = store2.session('username');
+      yield call(addCollection,{houseId,username});
+      yield message.success('收藏成功',0.5);
+      yield put({
+        type: 'getHouseList',
+      });
     },
     * export(_,{ call ,select}){
       const { searchHouse } = yield select();
@@ -82,14 +97,5 @@ export default {
         ...payload,
       }
     },
-    addCollection(state,{payload}){
-      const { collections } = state;
-      collections.push(payload.house);
-      console.log("collections",collections)
-      return {
-        ...state,
-        collections
-      }
-    }
   }
 }

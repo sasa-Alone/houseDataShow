@@ -1,74 +1,79 @@
-import { stringify } from 'qs';
+import {
+  stringify
+} from 'qs';
 import request from './request';
 
-
-// export const queryApplyListApi = `${url.mock}/activity/applyList`;
-
 export function queryAllHouse() {
-  return request(`/houseList`);
+  return request(`/house/list`);
 }
 
 export function queryAllComment() {
-  return request(`/commentList`);
+  return request(`/house/commentList`);
 }
 
-export function login(params){
+export function login(params) {
   console.log(params)
-  return request(`/house/login`,{
+  return request(`/house/login`, {
     method: 'post',
-    params,
+    header: {
+      contentType: 'application/json'
+    },
+    data: params,
   });
 }
 
-export function register(params){
-  return request(`/house/register`,{
+export function register(params) {
+  return request(`/house/register`, {
     method: 'post',
-    params,
+    header: {
+      contentType: 'application/json'
+    },
+    data: params,
   });
 }
 
-export function queryHouse(params){
-  return request(`/house/search`,{
+export function queryHouse(params) {
+  return request(`/house/search`, {
     method: 'post',
-    params,
+    header: {
+      contentType: 'application/json'
+    },
+    data: params,
   });
 }
 
-export function exportHouse(params){
-  console.log("liebiao",params)
-  return request(`/house/export`,{
+export function exportHouse(params) {
+  console.log("liebiao", params)
+  return request(`/house/export`, {
     method: 'post',
-    params,
+    data: params,
   });
 }
 
-export function analysisHouse(params){
-  return request(`/house/analysis`,{
+export function analysisHouse(params) {
+  return request(`/house/analysis`, {
     method: 'post',
-    params,
+    data: params,
   });
 }
 
-export function queryAllCollection(){
-  return request(`/house/collection`);
+export function queryAllCollection(params) {
+  return request(`/house/collectionList?${stringify(params)}`);
 }
 
-// export function queryActivityDetail(params){
-//   return request(`${url.mock}/activity/detail?${stringify(params)}`);
-// }
+export function addComment(params){
+  return request(`/house/comment`, {
+    method: 'post',
+    data: params,
+  });
+}
 
-// export function cancleApply(params){
-//   return request(`${url.mock}/activity/cancer?${stringify(params)}`);
-// }
 
-// export function queryActivityQuestion(params){
-//   return request(`${url.mock}/activity/question?${stringify(params)}`);
-// }
+export function addCollection(params){
+  return request(`/house/addCollection?${stringify(params)}`);
+}
 
-// export function saveUserAnswer(params){
-//   return request(`${url.mock}/activity/apply`,
-//   {
-//     method: 'post',
-//     params,
-//   });
-// }
+export function unCollection(params){
+  return request(`/house/unCollection?${stringify(params)}`);
+}
+

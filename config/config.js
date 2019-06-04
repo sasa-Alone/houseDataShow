@@ -25,8 +25,15 @@ export default {
   routes,
   publicPath: getPublishPath(process.env),
   treeShaking: true,
-  context: {
-    user_agent_type: 'weixin',
+  // context: {
+  //   user_agent_type: 'weixin',
+  // },
+  proxy: {
+    "/house": {
+      "target": "http://localhost:3004/",
+      "changeOrigin": true,
+      "pathRewrite": { "^/house" : "/house" }
+    }
   },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html

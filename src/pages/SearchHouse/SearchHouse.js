@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input,Row, Col, Form, Button, Radio, Table, Divider } from 'antd';
+import { Input,Row, Col, Form, Button, Radio, Table, Divider, Tag } from 'antd';
 import styles from "./SearchHouse.less";
 import { connect } from 'dva';
 
@@ -48,9 +48,12 @@ class SearchHouse extends Component {
     {
       title: '户型',
       dataIndex: 'model',
+      render:(text,record)=>{
+        return `${text}居室`
+      }
     },
     {
-      title: '面积',
+      title: '面积（平方）',
       dataIndex: 'size',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.size - b.size,
@@ -62,6 +65,14 @@ class SearchHouse extends Component {
     {
       title: '特色',
       dataIndex: 'special',
+      className:'tags',
+      render:(text,record)=>{
+        let arr = []
+        for (let i in text) {
+            arr.push(text[i]); //属性
+        }
+        return arr.map(item=>(<Tag color="blue">{item}</Tag>) )
+      }
     },
     {
       title: '操作',
@@ -70,17 +81,17 @@ class SearchHouse extends Component {
         <span>
           <a href= {record.link}>详情</a>
           <Divider type="vertical" />
-          <Button type="link"
+          <a href="#"
           onClick={(e)=>{
             const {dispatch} = this.props;
-            console.log(record)
+            console.log("collection",record)
             dispatch({
               type:"searchHouse/addCollection",
               payload:{
                 house:record,
               }
             })
-          }}>收藏</Button>
+          }}>收藏</a>
         </span>
       ),
     },
@@ -174,22 +185,22 @@ class SearchHouse extends Component {
           <Row>
             <Col md={12}>
               <Form.Item label="平台" {...formItemShortLayouts} >
-                  {getFieldDecorator('platform', { initialValue: 'no' })(
+                  {getFieldDecorator('platform', { initialValue: '' })(
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="no">不限</Radio.Button>
-                      <Radio.Button value="ziru">自如</Radio.Button>
-                      <Radio.Button value="danke">蛋壳</Radio.Button>
+                      <Radio.Button value="">不限</Radio.Button>
+                      <Radio.Button value="自如">自如</Radio.Button>
+                      <Radio.Button value="蛋壳公寓">蛋壳公寓</Radio.Button>
                     </Radio.Group>
                   )}
               </Form.Item>
             </Col>
             <Col md={12} >
               <Form.Item label="类型" {...formItemShortLayouts}>
-                  {getFieldDecorator('type', { initialValue: 'no' })(
+                  {getFieldDecorator('type', { initialValue: '' })(
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="no">不限</Radio.Button>
-                      <Radio.Button value="full">整租</Radio.Button>
-                      <Radio.Button value="shared">合租</Radio.Button>
+                      <Radio.Button value="">不限</Radio.Button>
+                      <Radio.Button value="整租">整租</Radio.Button>
+                      <Radio.Button value="合租">合租</Radio.Button>
                     </Radio.Group>
                   )}
               </Form.Item>
@@ -198,18 +209,18 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="区域" {...formItemLayout}>
-                  {getFieldDecorator('area', { initialValue: 'no' })(
+                  {getFieldDecorator('area', { initialValue: '' })(
                     <Radio.Group buttonStyle="solid">
-                      <Radio.Button value="no">不限</Radio.Button>
-                      <Radio.Button value="shangcheng">上城</Radio.Button>
-                      <Radio.Button value="xiacheng">下城</Radio.Button>
-                      <Radio.Button value="yuhang">余杭</Radio.Button>
-                      <Radio.Button value="gongshu">拱墅</Radio.Button>
-                      <Radio.Button value="jianggan">江干</Radio.Button>
-                      <Radio.Button value="bingjiang">滨江</Radio.Button>
-                      <Radio.Button value="xiaoshan">萧山</Radio.Button>
-                      <Radio.Button value="xihu">西湖</Radio.Button>
-                      <Radio.Button value="qiantang">钱塘新区</Radio.Button>
+                      <Radio.Button value="">不限</Radio.Button>
+                      <Radio.Button value="上城">上城</Radio.Button>
+                      <Radio.Button value="下城">下城</Radio.Button>
+                      <Radio.Button value="余杭">余杭</Radio.Button>
+                      <Radio.Button value="拱墅">拱墅</Radio.Button>
+                      <Radio.Button value="江干">江干</Radio.Button>
+                      <Radio.Button value="滨江">滨江</Radio.Button>
+                      <Radio.Button value="萧山">萧山</Radio.Button>
+                      <Radio.Button value="西湖">西湖</Radio.Button>
+                      <Radio.Button value="钱塘新区">钱塘新区</Radio.Button>
                     </Radio.Group>
                   )}
               </Form.Item>
@@ -218,14 +229,14 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="租金" {...formItemLayout}>
-              {getFieldDecorator('price', { initialValue: 'no' })(
+              {getFieldDecorator('price', { initialValue: '' })(
                 <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="no">不限</Radio.Button>
-                  <Radio.Button value="1500">1500以下</Radio.Button>
+                  <Radio.Button value="">不限</Radio.Button>
+                  <Radio.Button value="0-500">1500以下</Radio.Button>
                   <Radio.Button value="1500-2000">1500-2000</Radio.Button>
                   <Radio.Button value="2000-3000">2000-3000</Radio.Button>
                   <Radio.Button value="3000-5000">3000-5000</Radio.Button>
-                  <Radio.Button value="5000">5000以上</Radio.Button>
+                  <Radio.Button value="5000-1000000">5000以上</Radio.Button>
                 </Radio.Group>
               )}
               </Form.Item>
@@ -234,9 +245,9 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="居室" {...formItemLayout}>
-              {getFieldDecorator('model', { initialValue: 'no' })(
+              {getFieldDecorator('model', { initialValue: '' })(
                 <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="no">不限</Radio.Button>
+                  <Radio.Button value="">不限</Radio.Button>
                   <Radio.Button value="1">1居室</Radio.Button>
                   <Radio.Button value="2">2居室</Radio.Button>
                   <Radio.Button value="3">3居室</Radio.Button>
@@ -250,10 +261,10 @@ class SearchHouse extends Component {
           <Row>
             <Col md={24}>
               <Form.Item label="面积" {...formItemLayout}>
-              {getFieldDecorator('size', { initialValue: 'no' })(
+              {getFieldDecorator('size', { initialValue: '' })(
                 <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="no">不限</Radio.Button>
-                  <Radio.Button value="40">
+                  <Radio.Button value="">不限</Radio.Button>
+                  <Radio.Button value="0-40">
                     40m<sup>2</sup>以下
                   </Radio.Button>
                   <Radio.Button value="40-60">
@@ -265,7 +276,7 @@ class SearchHouse extends Component {
                   <Radio.Button value="80-100">
                     80m<sup>2</sup>-100m<sup>2</sup>
                   </Radio.Button>
-                  <Radio.Button value=">100">
+                  <Radio.Button value="100-10000">
                     100m<sup>2</sup>以上
                   </Radio.Button>
                 </Radio.Group>
@@ -276,12 +287,12 @@ class SearchHouse extends Component {
           <Row>
             <Col md={13} style={{marginLeft:-4}}>
               <Form.Item label="特色" {...formItemShortLayouts}>
-              {getFieldDecorator('special', { initialValue: 'no' })(
+              {getFieldDecorator('special', { initialValue: '' })(
                 <Radio.Group buttonStyle="solid">
-                  <Radio.Button value="no">不限</Radio.Button>
-                  <Radio.Button value="cesuo">独立卫生间</Radio.Button>
-                  <Radio.Button value="yangtai">独立阳台</Radio.Button>
-                  <Radio.Button value="suo">智能锁</Radio.Button>
+                  <Radio.Button value="">不限</Radio.Button>
+                  <Radio.Button value="独立卫生间">离地铁近</Radio.Button>
+                  <Radio.Button value="独立阳台">独立阳台</Radio.Button>
+                  <Radio.Button value="智能锁">智能锁</Radio.Button>
                 </Radio.Group>
               )}
               </Form.Item>
@@ -330,7 +341,7 @@ class SearchHouse extends Component {
             {hasSelected ? `已选 ${selectedRowKeys.length} 条数据` : ''}
           </span>
         </div>
-        <Table rowSelection={rowSelection} columns={this.columns} dataSource={dataSource} />
+        <Table rowSelection={rowSelection} columns={this.columns} dataSource={dataSource} rowKey="_id"/>
       </div>
     )
   }
