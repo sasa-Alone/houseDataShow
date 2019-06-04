@@ -43,8 +43,7 @@ export function queryHouse(params) {
 }
 
 export function exportHouse(params) {
-  console.log("liebiao", params)
-  return request(`/house/export`, {
+  return request(`/house/getHouseByIds`, {
     method: 'post',
     data: params,
   });
@@ -81,3 +80,27 @@ export function crawl(){
   return request(`/house/startCrawl`);
 }
 
+export function getRecord(){
+  return request(` /house/getRecord`);
+}
+
+export function queryPieData(){
+  return request(` /house/getPieOption`);
+}
+
+
+export function queryAvePrice(){
+  return request(`/house/getAvePrice`);
+}
+
+export function queryHouseNumber(){
+  return request(`/house/getHouseNumber`);
+}
+
+export function queryCloudTags(){
+  return request(`/house/getHouseTags`);
+}
+
+export function queryMapData(){
+  return request(`/house/getMapData`);
+}

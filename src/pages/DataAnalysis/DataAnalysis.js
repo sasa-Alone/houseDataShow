@@ -6,19 +6,31 @@ import barOption from './barOption';
 import barOption2 from './barOption2';
 import BMap from 'echarts/extension/bmap/bmap';
 import { TagCloud } from 'ant-design-pro/lib/Charts';
-
+import { connect } from 'dva';
 
 const TabPane = Tabs.TabPane;
 
-
+@connect(({ data })=> {
+  return ({
+    pipeData: data.pipeData,
+    avePrice:data.avePrice,
+    houseNumber:data.houseNumber,
+    tagsResult:data.tagsResult,
+    mapData:data.mapData,
+  })
+})
 class DataAnalysis extends Component {
 
-  constructor(props) {
-    super(props);
+
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch({
+      type:'data/getData'
+    });
   }
 
   getPieOption() {
-    const data = this.genData(50);
+    const data = this.genData();
     return {
       title: {
         text: '各大平台业务市场占比',
@@ -41,7 +53,7 @@ class DataAnalysis extends Component {
       },
       series: [
         {
-          name: '姓名',
+          name: '市场占比',
           type: 'pie',
           radius: '55%',
           center: ['40%', '50%'],
@@ -59,109 +71,38 @@ class DataAnalysis extends Component {
   }
 
   getBarOption() {
-    const option = barOption;
-    return option;
+    const { avePrice } = this.props;
+    return barOption(avePrice);
   }
 
   getBarOption2() {
-    const option = barOption2;
-    return option;
+    const { houseNumber }= this.props;
+    return barOption2(houseNumber);
   }
 
   getMapOption() {
-    const option = mapOption;
-    return option;
+    const {mapData} = this.props;
+    return mapOption(mapData);
   }
 
   changeTab(key) {
     console.log(key);
   }
 
-  getTagCloud() {
-    const tags = [];
-    const tagsName = [
-      '首页',
-      '公寓',
-      '地铁',
-      '近地',
-      '精装',
-      '精装',
-      '精装',
-      '精装',
-      '阳台',
-      '阳台',
-      '阳台',
-      '独卫',
-      '独卫',
-      '独卫',
-      '绿化',
-      '小区',
-      '首页',
-      '公寓',
-      '地铁',
-      '近地',
-      '精装',
-      '精装',
-      '精装',
-      '精装',
-      '阳台',
-      '阳台',
-      '阳台',
-      '独卫',
-      '独卫',
-      '独卫',
-      '绿化',
-      '小区',
-      '首页',
-      '公寓',
-      '地铁',
-      '近地',
-      '精装',
-      '精装',
-      '精装',
-      '精装',
-      '阳台',
-      '阳台',
-      '阳台',
-      '独卫',
-      '独卫',
-      '独卫',
-      '绿化',
-      '小区',
-      '首页',
-      '公寓',
-      '地铁',
-      '近地',
-      '精装',
-      '精装',
-      '精装',
-      '精装',
-      '阳台',
-      '阳台',
-      '阳台',
-      '独卫',
-      '独卫',
-      '独卫',
-      '绿化',
-      '小区',
-    ];
-    for (let i = 0; i < tagsName.length; i += 1) {
-      tags.push({
-        name: tagsName[i],
-        value: Math.floor(Math.random() * 50) + 20,
-      });
-    }
-    return tags;
-  }
 
   genData() {
-    let legendData = ['蛋壳公寓', '自如', '链家', '我爱我家', '嗨住租房'];
+    const { pipeData } = this.props;
+    let legendData = [];
+    for (let item in pipeData){
+      legendData.push(item)
+    }
     let seriesData = [];
     let selected = {};
     for (let i = 0; i < legendData.length; i++) {
+      const name = legendData[i];
       seriesData.push({
-        name: legendData[i],
-        value: Math.round(Math.random() * 100000),
+        name,
+        value: pipeData[name],
       });
       selected[legendData[i]] = i < legendData.length;
     }
@@ -174,6 +115,8 @@ class DataAnalysis extends Component {
   }
 
   render() {
+    const { tagsResult } = this.props;
+    console.log(tagsResult)
     return (
       <div>
         <Tabs defaultActiveKey="1" onChange={(key) => {
@@ -192,20 +135,21 @@ class DataAnalysis extends Component {
             <ReactEcharts option={this.getBarOption2()}/>
           </TabPane>
           <TabPane tab="词云分析" key="5">
-            <Row>
+           <Row>
               <Col span={8}>
                 <div>自如</div>
-                <TagCloud data={this.getTagCloud()} height={200}/>
+                <TagCloud key={tagsResult} data={tagsResult['自如']} height={200}/>
               </Col>
               <Col span={8}>
                 <div>蛋壳</div>
-                <TagCloud data={this.getTagCloud()} height={200}/>
+                <TagCloud key={tagsResult} data={tagsResult['蛋壳公寓']} height={200}/>
               </Col>
               <Col span={8}>
-                <div>链家</div>
-                <TagCloud data={this.getTagCloud()} height={200}/>
+                <div>嗨住</div>
+                <TagCloud key={tagsResult} data={tagsResult['嗨住']} height={200}/>
               </Col>
             </Row>
+
           </TabPane>
         </Tabs>
 

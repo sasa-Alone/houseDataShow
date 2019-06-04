@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Monitor.less';
-import { Row, Col, Timeline, Steps, Button, Icon } from 'antd';
+import { Row, Col, Timeline, Steps, Button, Icon, Divider } from 'antd';
 import { connect } from 'dva';
 
 const Step = Steps.Step;
@@ -27,6 +27,12 @@ class Monitor extends Component {
 
   // constructor(props) {
   //   super(props);
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch({
+      type:'monitor/getRecord'
+    })
+  }
 
   handleClickStart() {
     const { dispatch } = this.props;
@@ -45,13 +51,23 @@ class Monitor extends Component {
 
   }
 
-  renderHistoryRecord(list) {
+  renderHistoryRecord() {
+    const { recordList } = this.props;
     const historyEle = [];
-    list.forEach((item, index) => {
+    recordList.forEach((item, index) => {
       historyEle.push(
-        <Timeline.Item key={index} color={item.status ? 'green' : 'red'}>
-          <div>{item.name}</div>
-          <div>{item.statusName}</div>
+        <Timeline.Item key={index} color={index%2===0 ? 'green' : 'red'}>
+          {/* <div> */}
+            <span>开始时间: {new Date(item.start_time).toString()} &nbsp;</span>
+            <Divider type="vertical" />
+            <span>结束时间: {new Date(item.finish_time).toString()} &nbsp;</span>
+          {/* </div> */}
+          {/* <div> */}
+            <Divider type="vertical" />
+            <span>爬取平台: {item.platform} &nbsp;</span>
+            <Divider type="vertical" />
+            <span>数据量: {item.item_scraped_count} &nbsp;</span>
+          {/* </div> */}
         </Timeline.Item>,
       );
     });
@@ -76,21 +92,20 @@ class Monitor extends Component {
   render() {
     return (
       <div className={styles.root}>
-        <p>爬虫监控页面</p>
-        <Row>
-          <Col span={14}>
-            <p>爬虫操作区域</p>
+        {/* <Row> */}
+          {/* <Col span={14}> */}
+            <h3>爬虫执行</h3>
             {this.renderStep()}
             <div className='btn-line'>
-              <Button onClick={()=>this.handleClickStart()} type="primary">开始</Button>
+              <Button className='right' onClick={()=>this.handleClickStart()} type="primary">开始</Button>
               {/* <Button style={{ marginLeft: '20px' }}>取消</Button> */}
             </div>
-          </Col>
-          <Col offset={2} span={8}>
-            <p>爬取记录区域</p>
+          {/* </Col> */}
+          {/* <Col offset={2} span={8}> */}
+            <h3 className='area'>爬取记录</h3>
             {this.renderHistoryRecord(list)}
-          </Col>
-        </Row>
+          {/* </Col> */}
+        {/* </Row> */}
       </div>
     );
   }

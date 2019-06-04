@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Input,Row, Col, Form, Button, Radio, Table, Divider, Tag } from 'antd';
 import styles from "./SearchHouse.less";
 import { connect } from 'dva';
-import Util from '../../utils'
 const { Search } = Input;
 
 @connect(({ searchHouse, loading,user })=> {
@@ -53,10 +52,13 @@ class SearchHouse extends Component {
       }
     },
     {
-      title: '面积（平方）',
+      title: '面积',
       dataIndex: 'size',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.size - b.size,
+      render:(text,record)=>{
+        return (<span>{record.size+' m'}<sup>2</sup></span>)
+      }
     },
     {
       title: '区域',
@@ -143,7 +145,6 @@ class SearchHouse extends Component {
 
   handleSelectChange = (selectedRowKeys,selectedRows) => {
     const { dispatch } = this.props;
-    console.log("selectedRowKeys",selectedRows)
     dispatch({
       type:"searchHouse/save",
       payload: {
@@ -178,50 +179,10 @@ class SearchHouse extends Component {
   };
 
   handleExport = () =>{
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type:"searchHouse/export",
-    // })
-    let data = [
-      {
-        "_id": "5cf4db41aea0b427f444c8d0",
-        "platform": "自如",
-        "title": "友家 · 湘湖家园3居室-南卧",
-        "link": "//hz.ziroom.com/z/vr/61654409.html",
-        "special": [
-          "非首次出租",
-          "房屋空气质量：已检测",
-          "离地铁近",
-          "独立阳台",
-          "友家4.0 木棉"
-        ],
-        "size": "25",
-        "floor": "6/6层",
-        "model": "3",
-        "address": "距1号线湘湖站步行约942米",
-        "price": 1309,
-        "type": "合租"
-      },
-      {
-        "_id": "5cf4db41aea0b427f444c8d1",
-        "platform": "自如",
-        "title": "友家 · 保利叶之林(一期)4居室-南卧",
-        "link": "//sh.ziroom.com/z/vr/61084747.html",
-        "special": [
-          "非首次出租",
-          "离地铁近",
-          "独立阳台",
-          "友家4.0 木棉"
-        ],
-        "size": "12",
-        "floor": "05/14层",
-        "model": "4",
-        "address": "距7号线祁华路站步行约689米",
-        "price": 1111,
-        "type": "合租"
-      }
-    ]
-    Util.exportExcel(data)
+    const {dispatch} = this.props;
+    dispatch({
+      type:"searchHouse/export",
+    })
   }
 
   handleAnalysis = () => {
@@ -275,15 +236,16 @@ class SearchHouse extends Component {
                   {getFieldDecorator('area', { initialValue: '' })(
                     <Radio.Group buttonStyle="solid">
                       <Radio.Button value="">不限</Radio.Button>
-                      <Radio.Button value="上城">上城</Radio.Button>
-                      <Radio.Button value="下城">下城</Radio.Button>
-                      <Radio.Button value="余杭">余杭</Radio.Button>
-                      <Radio.Button value="拱墅">拱墅</Radio.Button>
-                      <Radio.Button value="江干">江干</Radio.Button>
-                      <Radio.Button value="滨江">滨江</Radio.Button>
-                      <Radio.Button value="萧山">萧山</Radio.Button>
-                      <Radio.Button value="西湖">西湖</Radio.Button>
-                      <Radio.Button value="钱塘新区">钱塘新区</Radio.Button>
+                      <Radio.Button value="杭州">杭州</Radio.Button>
+                      <Radio.Button value="上海">上海</Radio.Button>
+                      <Radio.Button value="北京">北京</Radio.Button>
+                      <Radio.Button value="天津">天津</Radio.Button>
+                      <Radio.Button value="深圳">深圳</Radio.Button>
+                      <Radio.Button value="南京">南京</Radio.Button>
+                      <Radio.Button value="广州">广州</Radio.Button>
+                      <Radio.Button value="武汉">武汉</Radio.Button>
+                      <Radio.Button value="成都">成都</Radio.Button>
+                      <Radio.Button value="苏州">苏州</Radio.Button>
                     </Radio.Group>
                   )}
               </Form.Item>

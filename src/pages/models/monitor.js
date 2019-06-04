@@ -1,4 +1,4 @@
-import { crawl } from '../../service/houses';
+import { crawl, getRecord } from '../../service/houses';
 // import { message } from 'antd';
 // import store2 from 'store2';
 
@@ -14,19 +14,25 @@ export default {
   effects: {
     * stratCrawl(_, { call, put }) {
       yield call(crawl);
-      // const item = {
-      //   id: i,
-      //   status: i % 2 === 0,
-      //   statusName: i % 2 === 0 ? '成功' : '失败',
-      //   name: `第${i}次爬取数据`,
-      // };
+      const { result } = yield call(getRecord);
       yield put({
         type: 'save',
         payload: {
           active: 2,
+          recordList: result,
         },
       });
     },
+    * getRecord(_,{ call, put }){
+      const { result } = yield call(getRecord);
+      result.reverse()
+      yield put({
+        type: 'save',
+        payload: {
+          recordList: result,
+        },
+      });
+    }
   },
 
   reducers: {

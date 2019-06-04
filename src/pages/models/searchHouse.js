@@ -6,6 +6,7 @@ import {
   addCollection,
 } from '../../service/houses';
 import store2 from 'store2';
+import Util from '../../utils';
 import { message } from 'antd';
 
 export default {
@@ -80,9 +81,9 @@ export default {
     },
     * export(_,{ call ,select}){
       const { searchHouse } = yield select();
-      const { selectedRows } = searchHouse.selectedRows;
-      console.log("selectedRows",selectedRows)
-      yield call(exportHouse,{ selectedRows });
+      const houseIdList = searchHouse.selectedRowKeys;
+      const { houses } = yield call(exportHouse,{ houseIdList });
+      Util.exportExcel(houses)
     },
     * analysis(_,{ call ,select}){
       const { searchHouse } = yield select();
