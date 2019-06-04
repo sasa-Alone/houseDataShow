@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import { Tabs,Row, Col,Divider  } from 'antd';
-import mapOption from './mapOption'
-import barOption from './barOption'
-import barOption2 from './barOption2'
-import BMap from 'echarts/extension/bmap/bmap'
+import { Tabs, Row, Col, Divider } from 'antd';
+import mapOption from './mapOption';
+import barOption from './barOption';
+import barOption2 from './barOption2';
+import BMap from 'echarts/extension/bmap/bmap';
 import { TagCloud } from 'ant-design-pro/lib/Charts';
 
 
@@ -13,8 +13,8 @@ const TabPane = Tabs.TabPane;
 
 class DataAnalysis extends Component {
 
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
 
   getPieOption() {
@@ -59,15 +59,17 @@ class DataAnalysis extends Component {
   }
 
   getBarOption() {
-    const option = barOption
+    const option = barOption;
     return option;
   }
+
   getBarOption2() {
-    const option = barOption2
+    const option = barOption2;
     return option;
   }
+
   getMapOption() {
-    const option = mapOption
+    const option = mapOption;
     return option;
   }
 
@@ -75,8 +77,8 @@ class DataAnalysis extends Component {
     console.log(key);
   }
 
-  getTagCloud(){
-    const tags = []
+  getTagCloud() {
+    const tags = [];
     const tagsName = [
       '首页',
       '公寓',
@@ -153,7 +155,7 @@ class DataAnalysis extends Component {
   }
 
   genData() {
-    let legendData = ['蛋壳公寓','自如','链家','我爱我家','嗨住租房'];
+    let legendData = ['蛋壳公寓', '自如', '链家', '我爱我家', '嗨住租房'];
     let seriesData = [];
     let selected = {};
     for (let i = 0; i < legendData.length; i++) {
@@ -161,7 +163,7 @@ class DataAnalysis extends Component {
         name: legendData[i],
         value: Math.round(Math.random() * 100000),
       });
-      selected[legendData[i]] = i < 6;
+      selected[legendData[i]] = i < legendData.length;
     }
 
     return {
@@ -174,9 +176,11 @@ class DataAnalysis extends Component {
   render() {
     return (
       <div>
-        <Tabs defaultActiveKey="1" onChange={(key)=>{this.changeTab(key)}}>
+        <Tabs defaultActiveKey="1" onChange={(key) => {
+          this.changeTab(key);
+        }}>
           <TabPane tab="业务范围分析" key="1">
-            <ReactEcharts style={{height:'500px'}} option={this.getMapOption()}/>
+            <ReactEcharts style={{ height: '500px' }} option={this.getMapOption()}/>
           </TabPane>
           <TabPane tab="市场占比分析" key="2">
             <ReactEcharts option={this.getPieOption()}/>
@@ -191,15 +195,15 @@ class DataAnalysis extends Component {
             <Row>
               <Col span={8}>
                 <div>自如</div>
-                <TagCloud data={this.getTagCloud()} height={200} />
+                <TagCloud data={this.getTagCloud()} height={200}/>
               </Col>
               <Col span={8}>
                 <div>蛋壳</div>
-                <TagCloud data={this.getTagCloud()} height={200} />
+                <TagCloud data={this.getTagCloud()} height={200}/>
               </Col>
               <Col span={8}>
                 <div>链家</div>
-                <TagCloud data={this.getTagCloud()} height={200} />
+                <TagCloud data={this.getTagCloud()} height={200}/>
               </Col>
             </Row>
           </TabPane>
