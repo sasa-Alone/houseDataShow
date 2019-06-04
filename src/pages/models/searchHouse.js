@@ -44,7 +44,11 @@ export default {
 
   effects: {
     * getHouseList(_, { call, put }) {
-      const { houses } = yield call(queryAllHouse);
+      let username = store2.session('username');
+      if(!username){
+        username = '';
+      }
+      const { houses } = yield call(queryAllHouse,{username});
       yield put({
         type: 'save',
         payload: {

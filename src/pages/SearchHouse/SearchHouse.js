@@ -5,7 +5,7 @@ import { connect } from 'dva';
 
 const { Search } = Input;
 
-@connect(({ searchHouse, loading })=> {
+@connect(({ searchHouse, loading,user })=> {
   return ({
     selectedRowKeys: searchHouse.selectedRowKeys,
     dataSource: searchHouse.houseList,
@@ -77,23 +77,46 @@ class SearchHouse extends Component {
     {
       title: '操作',
       dataIndex: 'link',
-      render: (text, record) => (
-        <span>
-          <a href= {record.link}>详情</a>
-          <Divider type="vertical" />
-          <a href="#"
-          onClick={(e)=>{
-            const {dispatch} = this.props;
-            console.log("collection",record)
-            dispatch({
-              type:"searchHouse/addCollection",
-              payload:{
-                house:record,
-              }
-            })
-          }}>收藏</a>
-        </span>
-      ),
+      render: (text, record) => {
+        if(record.colStatus){
+          return (
+            <span>
+              <a href= {record.link}>详情</a>
+              <Divider type="vertical" />
+              <a href="#"
+              onClick={(e)=>{
+                const {dispatch} = this.props;
+                console.log("collection",record)
+                dispatch({
+                  type:"user/unCollection",
+                  payload:{
+                    house:record,
+                  }
+                })
+              }}>取消收藏</a>
+            </span>
+          )
+        }else{
+          return (
+            <span>
+              <a href= {record.link}>详情</a>
+              <Divider type="vertical" />
+              <a href="#"
+              onClick={(e)=>{
+                const {dispatch} = this.props;
+                console.log("collection",record)
+                dispatch({
+                  type:"searchHouse/addCollection",
+                  payload:{
+                    house:record,
+                  }
+                })
+              }}>收藏</a>
+            </span>
+          )
+        }
+
+      },
     },
   ];
 

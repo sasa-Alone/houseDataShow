@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './Monitor.less';
 import { Row, Col, Timeline, Steps, Button, Icon } from 'antd';
+import { connect } from 'dva';
 
 const Step = Steps.Step;
 
@@ -15,36 +16,29 @@ for (let i = 0; i < 5; i++) {
   list.push(item);
 }
 
+@connect(({ monitor })=> {
+  return ({
+    active: monitor.active,
+    result: monitor.result,
+    recordList: monitor.recordList,
+  })
+})
 class Monitor extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: 0,
-      result: true,
-      recordList: []
-    };
-  }
+  // constructor(props) {
+  //   super(props);
 
   handleClickStart() {
-    this.setState({
-      active: 1,
-    });
-    setTimeout(()=>{
-      console.log()
-      const random = Math.random()*100
-      if (random > 50) {
-        this.setState({
-          active: 2,
-          result: false
-        })
-      }else{
-        this.setState({
-          active: 2,
-          result: true
-        })
+    const { dispatch } = this.props;
+    dispatch({
+      type:'monitor/save',
+      payload:{
+        active: 1,
       }
-    },1000)
+    })
+    dispatch({
+      type:'monitor/stratCrawl',
+    })
   }
 
   getRecordList(){
@@ -63,14 +57,13 @@ class Monitor extends Component {
     });
     return (
       <Timeline>
-
         {historyEle}
       </Timeline>
     );
   }
 
   renderStep() {
-    const {active, result} = this.state
+    const {active, result} = this.props;
     return (
       <Steps current={active} status={result?'finish':'error'}>
         <Step title='未开始'/>
@@ -90,7 +83,7 @@ class Monitor extends Component {
             {this.renderStep()}
             <div className='btn-line'>
               <Button onClick={()=>this.handleClickStart()} type="primary">开始</Button>
-              <Button style={{ marginLeft: '20px' }}>取消</Button>
+              {/* <Button style={{ marginLeft: '20px' }}>取消</Button> */}
             </div>
           </Col>
           <Col offset={2} span={8}>

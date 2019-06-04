@@ -3,8 +3,8 @@ import {
 } from 'qs';
 import request from './request';
 
-export function queryAllHouse() {
-  return request(`/house/list`);
+export function queryAllHouse(params) {
+  return request(`/house/list?${stringify(params)}`);
 }
 
 export function queryAllComment() {
@@ -75,5 +75,9 @@ export function addCollection(params){
 
 export function unCollection(params){
   return request(`/house/unCollection?${stringify(params)}`);
+}
+
+export function crawl(){
+  return request(`/house/startCrawl`);
 }
 

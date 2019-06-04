@@ -15,6 +15,7 @@ export default {
   effects: {
     *getCommentList(_, { call, put }) {
       const {list} = yield call(queryAllComment);
+      list.reverse();
       yield put({
         type: 'save',
         payload: {
